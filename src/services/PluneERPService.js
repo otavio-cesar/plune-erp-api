@@ -9,6 +9,8 @@ const possibleSitutuation = '/JSON/PCP.MotivoParada/'
 const cookie = "UltraClassLogin=teste10:Ultra.Users:rodrigo-maximo@hotmail.com:@yuGUdGnHDxdvunpyAGGtt_MnMLsY6LLzCL9cgE_EbicGmNgpaJsgdz1WJnfXAr5O8xBJXETmULZ5N3Hw3SY_vQ:pt_br:::992"
 const FilialId = "896"
 
+var iconv = require('iconv-lite');
+
 class PluneERPService {
 
     constructor() { }
@@ -21,7 +23,8 @@ class PluneERPService {
                 cookie: cookie
             },
         })
-        return await res.json()
+        var decoded = iconv.decode(await res.buffer(), 'iso-8859-1');
+        return JSON.parse(decoded)
     }
 
     async getOrders(params) {
@@ -40,7 +43,8 @@ class PluneERPService {
                 cookie: cookie
             },
         })
-        return await res.json()
+        var decoded = iconv.decode(await res.buffer(), 'iso-8859-1');
+        return JSON.parse(decoded)
     }
 
     async getStage(params) {
@@ -62,7 +66,8 @@ class PluneERPService {
                 cookie: cookie
             },
         })
-        return await res.json()
+        var decoded = iconv.decode(await res.buffer(), 'iso-8859-1');
+        return JSON.parse(decoded)
     }
 
     async getProductionLine(params) {
@@ -77,7 +82,8 @@ class PluneERPService {
                 cookie: cookie
             },
         })
-        return await res.json()
+        var decoded = iconv.decode(await res.buffer(), 'iso-8859-1');
+        return JSON.parse(decoded)
     }
 
     async patchStageSituation(params) {
@@ -98,7 +104,8 @@ class PluneERPService {
                 cookie: cookie
             },
         })
-        return await res.json()
+        var decoded = iconv.decode(await res.buffer(), 'iso-8859-1');
+        return JSON.parse(decoded)
     }
 
     async getPossibleStageSituation() {
@@ -109,7 +116,8 @@ class PluneERPService {
                 cookie: cookie
             },
         })
-        return await res.json()
+        var decoded = iconv.decode(await res.buffer(), 'iso-8859-1');
+        return JSON.parse(decoded)
     }
 
 }

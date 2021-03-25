@@ -14,7 +14,7 @@ module.exports = {
   },
 
   async patchStageSituation(req, res) {
-    try {
+    try {    
       const { OrdemId, ProcessoId, ProdutoId, Status, MotivoParadaId, QuantidadeProduzida, IsInspecao } = req.body
       if (Status == 40 && !QuantidadeProduzida) {
         return res.status(400).json({ message: 'Quantidade produzida não informada' });
