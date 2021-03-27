@@ -32,7 +32,6 @@ class EtapaService extends BaseService {
     });
   }
 
-
 }
 
 module.exports = EtapaService;
