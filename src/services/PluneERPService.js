@@ -6,7 +6,7 @@ const linha = 'JSON/PCP.UsuarioPCPLinhaProducao/'
 const stage = 'JSON/PCP.OrdemProducaoItemProcessoProdutivo/'
 const possibleSitutuation = '/JSON/PCP.MotivoParada/'
 
-const cookie = "UltraClassLogin=teste10:Ultra.Users:rodrigo-maximo@hotmail.com:@ipvJb85t48hYOJFJKMToQRVoVz7QEh3TY5h9dN976ldYxNqhtk5Vd8nVAWKNSSq7-DeD5dIgHOy78vceG9wmZQ:pt_br:::992"
+const cookie = "UltraClassLogin=teste10:Ultra.Users:rodrigo-maximo@hotmail.com:@fzuRCwkWn2Fqbq8HRhMi_ePmAdi0fTNFLD9e1-ZoW0LQMqrgCOkGWZ9t7zM8Wtkg8w19s-aOLsnqFXrGt75bow:pt_br:::992"
 const FilialId = "896"
 
 var iconv = require('iconv-lite');

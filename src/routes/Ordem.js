@@ -6,5 +6,6 @@ const ordem = express.Router();
 ordem.get('/', OrdemController.getOrdemPlune);
 ordem.get('/LineProduction', OrdemController.getOrdemPluneByLineProduction);
 ordem.patch('/patchRefugar', OrdemController.patchRefugar);
+ordem.get('/:id', OrdemController.getOrdemById);
 
 module.exports = ordem;

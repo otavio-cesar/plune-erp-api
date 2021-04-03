@@ -17,14 +17,18 @@ module.exports = {
       const { linhaprocessoprodutivoids } = req.headers
       let ordens
       const data = await pluneERPService.getStage({ LinhaProcessoProdutivoIds: linhaprocessoprodutivoids })
-      const stages = data.data.row
-      if (stages.length > 0) {
-        let Ids = stages.map(s => s.OrdemId.value)
-        ordens = await pluneERPService.getOrders({ Ids })
+      if (!data.ErrorStatus) {
+        const stages = data.data.row
+        if (stages.length > 0) {
+          let Ids = stages.map(s => s.OrdemId.value)
+          ordens = await pluneERPService.getOrders({ Ids })
+        } else {
+          ordens = { data: { row: [] } }
+        }
+        return res.json(ordens);
       } else {
-        ordens = { data: { row: [] } }
+        res.status(400).json(data.ErrorStatus)
       }
-      return res.json(ordens);
     } catch (e) {
       res.status(500).json(e.message)
     }
@@ -44,5 +48,17 @@ module.exports = {
       res.status(500).json({ message: "Erro no servidor", detail: e.message })
     }
   },
+
+  async getOrdemById(req, res) {
+    try {
+      const { id } = req.params
+      let ordem
+      ordem = await pluneERPService.getOrders({ Ids: [id] })
+      return res.json(ordem);
+    } catch (e) {
+      res.status(500).json(e.message)
+    }
+  },
+
 
 };
