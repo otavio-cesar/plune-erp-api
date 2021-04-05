@@ -41,7 +41,10 @@ module.exports = {
         return res.status(400).json({ message: 'Quantidade refugada não informada' });
       }
       await ordemService.createOrUpdate(OrdemId, ProdutoId, QuantidadeRefugada)
-        .then(async (data) => { console.log(data) })
+        .then(async (data) => {
+          console.log(data)
+          
+        })
         .catch(err => { return res.status(400).json({ message: 'Erro ao salvar refugo', detail: err.message }) })
       return res.status(201).json({});
     } catch (e) {

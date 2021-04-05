@@ -51,8 +51,25 @@ module.exports = {
   },
 
   async getUsersPlune(req, res) {
-    let users = await pluneERPService.getUsers();
-    return res.json(users)
+    try {
+      let data = await pluneERPService.getUsers();
+      if (!data.ErrorStatus) {
+        const usuarios = await usuarioService.ObterTodos();
+        let result = data.data.row.map(up => {
+          const u = usuarios.find(u => u.dataValues.UserPCPId == up.Id.value)?.dataValues
+          return {
+            Id: up.Id,
+            Nome: up.Nome,
+            email: u?.email ?? ''
+          }
+        })
+        return res.json(result)
+      } else {
+        res.status(500).json({ message: 'Erro no servidor Plune', detail: data.ErrorStatus })
+      }
+    } catch (e) {
+      res.status(500).json(e.message)
+    }
   }
 
 };

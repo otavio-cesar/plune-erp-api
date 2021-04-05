@@ -1,12 +1,12 @@
 const fetch = require("node-fetch");
 const apiUrl = 'https://solucao-teste10.plune.com.br/'
-const user = 'REST/Company.CompanyUsers/'
+const user = 'REST/PCP.User/'
 const order = 'JSON/PCP.OrdemProducaoItem/'
 const linha = 'JSON/PCP.UsuarioPCPLinhaProducao/'
 const stage = 'JSON/PCP.OrdemProducaoItemProcessoProdutivo/'
 const possibleSitutuation = '/JSON/PCP.MotivoParada/'
 
-const cookie = "UltraClassLogin=teste10:Ultra.Users:rodrigo-maximo@hotmail.com:@fzuRCwkWn2Fqbq8HRhMi_ePmAdi0fTNFLD9e1-ZoW0LQMqrgCOkGWZ9t7zM8Wtkg8w19s-aOLsnqFXrGt75bow:pt_br:::992"
+const cookie = "UltraClassLogin=teste10:Ultra.Users:rodrigo-maximo@hotmail.com:@ZscNM1quB8EmwezME38AiRGpKmuCTXC_IH0pC9LrOUGESsVg-gSycRy4U3ig46btUyuiOHIa8ddp5pJ9Wd43-g:pt_br:::992"
 const FilialId = "896"
 
 var iconv = require('iconv-lite');
@@ -16,7 +16,9 @@ class PluneERPService {
     constructor() { }
 
     async getUsers() {
-        const res = await fetch(`${apiUrl}${user}Browse`, {
+        let _params = ''
+        _params += `_PCP.User.BrowseLimit=0&`
+        const res = await fetch(`${apiUrl}${user}Browse?${_params}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
