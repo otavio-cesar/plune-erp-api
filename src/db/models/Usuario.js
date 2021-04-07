@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
       senha: DataTypes.STRING,
       permissao: DataTypes.INTEGER,
       UserPCPId: DataTypes.INTEGER,
+      hash: DataTypes.STRING,
     },
     {
       freezeTableName: true
