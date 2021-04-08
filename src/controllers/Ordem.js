@@ -18,10 +18,14 @@ module.exports = {
       let ordens
       const data = await pluneERPService.getStage({ LinhaProcessoProdutivoIds: linhaprocessoprodutivoids })
       if (!data.ErrorStatus) {
-        const stages = data.data.row
+        let stages = data.data.row
+        // Remover etapas que operador não tenha ação
+        stages = stages.filter(e => ![stageSituation.finished.id, stageSituation.cancelled.id].includes(e.Status.value))
         if (stages.length > 0) {
           let Ids = stages.map(s => s.OrdemId.value)
           ordens = await pluneERPService.getOrders({ Ids })
+          // Remover ordens finalizadas ou canceladas
+          ordens.data.row = ordens.data.row.filter(o => ![stageSituation.finished.id, stageSituation.cancelled.id].includes(o.Status.value))
         } else {
           ordens = { data: { row: [] } }
         }
@@ -31,24 +35,6 @@ module.exports = {
       }
     } catch (e) {
       res.status(500).json(e.message)
-    }
-  },
-
-  async patchRefugar(req, res) {
-    try {
-      const { OrdemId, ProdutoId, QuantidadeRefugada } = req.body
-      if (!QuantidadeRefugada) {
-        return res.status(400).json({ message: 'Quantidade refugada não informada' });
-      }
-      await ordemService.createOrUpdate(OrdemId, ProdutoId, QuantidadeRefugada)
-        .then(async (data) => {
-          console.log(data)
-          
-        })
-        .catch(err => { return res.status(400).json({ message: 'Erro ao salvar refugo', detail: err.message }) })
-      return res.status(201).json({});
-    } catch (e) {
-      res.status(500).json({ message: "Erro no servidor", detail: e.message })
     }
   },
 
@@ -65,3 +51,13 @@ module.exports = {
 
 
 };
+
+const stageSituation = {
+  started: { id: 30, value: "Iniciado" },
+  paused: { id: 60, value: "Pausado" },
+  finished: { id: 40, value: "Finalizado" },
+  freeToStart: { id: 20, value: "Liberado para iniciar" },
+  inspect: { id: 180, value: "Inspeção" },
+  waitingLiberation: { id: 10, value: "Aguardando liberação" },
+  cancelled: { id: 50, value: "Cancelada" },
+}

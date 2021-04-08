@@ -19,7 +19,7 @@ class EtapaService extends BaseService {
     });
   }
 
-  async createOrUpdate(OrdemId, ProcessoId, QuantidadeProduzida, QuantidadeInspecionada) {
+  async createOrUpdate(OrdemId, ProcessoId, QuantidadeProduzida, QuantidadeInspecionada, QuantidadeRefugada) {
     var data = { OrdemId, ProcessoId, QuantidadeProduzida, QuantidadeInspecionada }
     await this.AbstractClass.findOne({
       where: { [Op.and]: [{ OrdemId }, { ProcessoId }] }
@@ -27,7 +27,7 @@ class EtapaService extends BaseService {
       if (!obj) {
         this.AbstractClass.create(data)
       } else {
-        this.AbstractClass.update({ QuantidadeProduzida, QuantidadeInspecionada }, { where: { [Op.and]: [{ OrdemId }, { ProcessoId }] } });
+        this.AbstractClass.update({ QuantidadeProduzida, QuantidadeInspecionada, QuantidadeRefugada }, { where: { [Op.and]: [{ OrdemId }, { ProcessoId }] } });
       }
     });
   }

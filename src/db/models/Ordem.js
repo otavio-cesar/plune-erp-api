@@ -4,7 +4,6 @@ module.exports = (sequelize, DataTypes) => {
     {
       OrdemId: { type: DataTypes.INTEGER, primaryKey: true },
       ProdutoId: { type: DataTypes.INTEGER, primaryKey: true },
-      QuantidadeRefugada: DataTypes.INTEGER,
     },
     {
       freezeTableName: true
