@@ -36,19 +36,28 @@ module.exports = {
     );
 
     const data = await pluneERPService.getProductionLine({ UserPCPId: usuario.UserPCPId })
-    const productionLine = data.data.row.map(p => p.LinhaId)
 
-    const userResult = {
-      id: usuario.id,
-      nome: usuario.nome,
-      email: usuario.email,
-      permissao: usuario.permissao,
-      productionLine
-    };
+    if (!data.ErrorStatus) {
+      const productionLine = data.data.row.map(p => p.LinhaId)
 
-    res.setHeader('Token', token)
+      const userResult = {
+        id: usuario.id,
+        nome: usuario.nome,
+        email: usuario.email,
+        permissao: usuario.permissao,
+        productionLine
+      };
 
-    return res.json(userResult);
+      res.setHeader('Token', token)
+
+      return res.json(userResult);
+    } else {
+      if (data.ErrorStatus.includes("Erro ao inicializar Ultra::Session em Ultra::SOA#new: Login: Sessão expirou")) {
+        return res.status(401).json({ error: 'Token de acesso ao Plune é inválido', detail: data.ErrorStatus })
+      } else {
+        return res.status(400).json({ error: 'Plune ERP gerou um erro', detail: data.ErrorStatus })
+      }
+    }
   },
 
   async getUsersPlune(req, res) {
