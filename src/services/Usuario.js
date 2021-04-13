@@ -14,8 +14,8 @@ class UsuarioService extends BaseService {
     return await this.AbstractClass.findOne({
       where: {
         [Op.or]: [
-          { email: emailNome },
-          { nome: emailNome }
+          { email: { [Op.iLike]: emailNome } },
+          { nome: { [Op.iLike]: emailNome } }
         ]
       }
     });

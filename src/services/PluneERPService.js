@@ -7,7 +7,7 @@ const linha = 'JSON/PCP.UsuarioPCPLinhaProducao/'
 const stage = 'JSON/PCP.OrdemProducaoItemProcessoProdutivo/'
 const possibleSitutuation = '/JSON/PCP.MotivoParada/'
 
-const cookie = "UltraClassLogin=teste10:Ultra.Users:rodrigo-maximo@hotmail.com:@TX9gX5jUxTGULUoINgenKCO_JaJln_XUQn47j65ExLNlXMUlZnqlljmqQrBvH7yuL22hcGyjSfWVndBWMI8veQ:pt_br:::992"
+const cookie = "UltraClassLogin2=teste10:Ultra.Users:rodrigo-maximo@hotmail.com:@TX9gX5jUxTGULUoINgenKCO_JaJln_XUQn47j65ExLNlXMUlZnqlljmqQrBvH7yuL22hcGyjSfWVndBWMI8veQ:pt_br:::992"
 const FilialId = "896"
 
 class PluneERPService {

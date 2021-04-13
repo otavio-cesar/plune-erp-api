@@ -8,8 +8,12 @@ const ordemService = new OrdemService(Ordem);
 module.exports = {
 
   async getOrdemPlune(req, res) {
-    let ordens = await pluneERPService.getOrders({})
-    return res.json(ordens);
+    try {
+      let ordens = await pluneERPService.getOrders({})
+      return res.json(ordens);
+    } catch (e) {
+      return res.status(500).json({ message: e.message == 'Unexpected token C in JSON at position 0' ? 'Token inválido' : e.message })
+    }
   },
 
   async getOrdemPluneByLineProduction(req, res) {

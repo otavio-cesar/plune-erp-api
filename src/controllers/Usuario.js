@@ -1,4 +1,4 @@
-const { Usuario } = require("../db/models/index");
+const { Usuario, Parametro } = require("../db/models/index");
 var jwt = require("jsonwebtoken");
 const EnumPermissao = require("../util/EnumPermissao");
 const { sendEmail } = require("../util/emailSender");
@@ -35,20 +35,29 @@ module.exports = {
       }
     );
 
-    const data = await pluneERPService.getProductionLine({ UserPCPId: usuario.UserPCPId })
+    let userResult = {
+      id: usuario.id,
+      nome: usuario.nome,
+      email: usuario.email,
+      permissao: usuario.permissao,
+    };
 
-    if (!data.ErrorStatus) {
+    res.setHeader('Token', token)
+
+    let data
+    try {
+      data = await pluneERPService.getProductionLine({ UserPCPId: usuario.UserPCPId })
+    } catch (e) {
+      return res.json(userResult);
+    }
+
+    if (!data.ErrorStatus || (data.ErrorStatus && usuario.permissao == EnumPermissao.Admin)) {
       const productionLine = data.data.row.map(p => p.LinhaId)
 
-      const userResult = {
-        id: usuario.id,
-        nome: usuario.nome,
-        email: usuario.email,
-        permissao: usuario.permissao,
+      userResult = {
+        ...userResult,
         productionLine
       };
-
-      res.setHeader('Token', token)
 
       return res.json(userResult);
     } else {
@@ -71,6 +80,7 @@ module.exports = {
             Id: up.Id,
             Nome: up.Nome,
             email: u?.email ?? '',
+            senha: u?.senha ?? '',
             permissao: u?.permissao ?? ''
           }
         })
@@ -79,11 +89,11 @@ module.exports = {
         res.status(500).json({ message: 'Erro no servidor Plune', detail: data.ErrorStatus })
       }
     } catch (e) {
-      res.status(500).json(e.message)
+      return res.status(500).json({ message: e.message == 'Unexpected token C in JSON at position 0' ? 'Token inválido' : e.message })
     }
   },
 
-  async convidar(req, res) {
+  async salvarUsuarioPCP(req, res) {
     const { UserPCPId, email, nome, permissao, enviarEmail } = req.body;
     var crypto = require("crypto");
     var hash = crypto.randomBytes(8).toString('hex');
@@ -108,6 +118,34 @@ module.exports = {
         .catch(e => {
           return res.status(500).json({ message: 'Ops, erro no servidor', detail: e.message })
         });
+    } catch (e) {
+      return res.status(500).json({ message: 'Ops, erro no servidor', detail: e.message })
+    }
+  },
+
+  async alteraToken(req, res) {
+    const { token } = req.body;
+    try {
+      await Parametro.findOne({ where: { chave: 'token-pcp' } })
+        .then(async obj => {
+          if (!obj) {
+            Parametro.create({ chave: 'token-pcp', valor: token })
+          } else {
+            Parametro.update({ ...obj, valor: token }, { where: { chave: 'token-pcp' } });
+          }
+          return res.status(201).json({})
+        })
+    } catch (e) {
+      return res.status(500).json({ message: 'Ops, erro no servidor', detail: e.message })
+    }
+  },
+
+  async getToken(req, res) {
+    try {
+      await Parametro.findOne({ where: { chave: 'token-pcp' } })
+        .then(async obj => {
+          return res.status(200).json(obj.valor)
+        })
     } catch (e) {
       return res.status(500).json({ message: 'Ops, erro no servidor', detail: e.message })
     }
