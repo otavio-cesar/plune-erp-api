@@ -37,9 +37,6 @@ class DatabaseService {
     if (!id) {
       return undefined;
     }
-    // O objeto não é deletado, apenas a coluna deletedAt é atualizada para o tempo atual
-    // cliente.destroy();
-    // O objeto é deletado
     return await this.AbstractClass.destroy({
       where: {
         id

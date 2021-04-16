@@ -1,7 +1,6 @@
 const { Usuario, Parametro } = require("../db/models/index");
 var jwt = require("jsonwebtoken");
 const EnumPermissao = require("../util/EnumPermissao");
-const { sendEmail } = require("../util/emailSender");
 const UsuarioService = require("../services/Usuario");
 const constants = require("../util/constants.json");
 const PluneERPService = require("../services/PluneERPService");
