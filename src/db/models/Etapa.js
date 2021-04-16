@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
       QuantidadeProduzida: DataTypes.INTEGER,
       QuantidadeInspecionada: DataTypes.INTEGER,
       QuantidadeRefugada: DataTypes.INTEGER,
+      ObservacaoRefugo: DataTypes.STRING,
     },
     {
       freezeTableName: true

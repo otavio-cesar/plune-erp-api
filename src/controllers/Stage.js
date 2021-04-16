@@ -16,18 +16,18 @@ module.exports = {
 
   async patchStageSituation(req, res) {
     try {
-      const { OrdemId, ProcessoId, ProdutoId, Status, MotivoParadaId, QuantidadeProduzida, QuantidadeInspecionada, QuantidadeRefugada } = req.body
+      const { OrdemId, ProcessoId, ProdutoId, Status, MotivoParadaId, QuantidadeProduzida, QuantidadeInspecionada, QuantidadeRefugada, ObservacaoRefugo } = req.body
       await Etapa.findOne({ where: { [Op.and]: [{ OrdemId }, { ProcessoId }] } })
         .then(async obj => {
           if (!obj) {
-            Etapa.create({ OrdemId, ProcessoId, QuantidadeProduzida, QuantidadeInspecionada, QuantidadeRefugada })
+            Etapa.create({ OrdemId, ProcessoId, QuantidadeProduzida, QuantidadeInspecionada, QuantidadeRefugada, ObservacaoRefugo })
           } else {
             if (QuantidadeProduzida)
               Etapa.update({ ...obj, QuantidadeProduzida }, { where: { [Op.and]: [{ OrdemId }, { ProcessoId }] } });
             if (QuantidadeInspecionada)
               Etapa.update({ ...obj, QuantidadeInspecionada }, { where: { [Op.and]: [{ OrdemId }, { ProcessoId }] } });
             if (QuantidadeRefugada)
-              Etapa.update({ ...obj, QuantidadeRefugada }, { where: { [Op.and]: [{ OrdemId }, { ProcessoId }] } });
+              Etapa.update({ ...obj, QuantidadeRefugada, ObservacaoRefugo }, { where: { [Op.and]: [{ OrdemId }, { ProcessoId }] } });
           }
         })
         .catch(e => {

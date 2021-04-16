@@ -38,7 +38,7 @@ module.exports = {
         res.status(400).json(data.ErrorStatus)
       }
     } catch (e) {
-      res.status(500).json(e.message)
+      return res.status(500).json({ message: e.message == 'Unexpected token C in JSON at position 0' ? 'Token inválido' : e.message })
     }
   },
 

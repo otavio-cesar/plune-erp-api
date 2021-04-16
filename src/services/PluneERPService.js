@@ -7,7 +7,7 @@ const linha = 'JSON/PCP.UsuarioPCPLinhaProducao/'
 const stage = 'JSON/PCP.OrdemProducaoItemProcessoProdutivo/'
 const possibleSitutuation = '/JSON/PCP.MotivoParada/'
 
-const cookie = "UltraClassLogin2=teste10:Ultra.Users:rodrigo-maximo@hotmail.com:@TX9gX5jUxTGULUoINgenKCO_JaJln_XUQn47j65ExLNlXMUlZnqlljmqQrBvH7yuL22hcGyjSfWVndBWMI8veQ:pt_br:::992"
+const cookie = "UltraClassLogin=teste10:Ultra.Users:rodrigo-maximo@hotmail.com:@QA-7E-MHqcgcQh8RR3HodCFDjIgtO66YS88PduANmtUtdJeOhah0YnekjJCcFqL6bwxYgTpWrMFggFqJdn1aAg:pt_br:::992"
 const FilialId = "896"
 
 class PluneERPService {
@@ -32,14 +32,14 @@ class PluneERPService {
 
     async getOrders(params) {
         let _params = ''
+        _params += `PCP.OrdemProducaoItem.BrowseLimit=0&`
+        _params += `_PCP.OrdemProducaoItem.OrderDesc=1&`
+        _params += `_PCP.OrdemProducaoItem.Order=Id&`
         if (params.ProdutoId) {
             _params = `PCP.OrdemProducaoItem.ProdutoId=${params.ProdutoId}&`
         }
         if (params.Ids) {
             _params = `PCP.OrdemProducaoItem.Id=${params.Ids.join(',')}&`
-            _params += `PCP.OrdemProducaoItem.BrowseLimit=0&`
-            _params += `_PCP.OrdemProducaoItem.OrderDesc=1&`
-            _params += `_PCP.OrdemProducaoItem.Order=Id&`
         }
         const res = await fetch(`${apiUrl}${order}Browse?${_params}`, {
             method: "GET",
