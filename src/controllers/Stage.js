@@ -16,15 +16,17 @@ module.exports = {
 
   async patchStageSituation(req, res) {
     try {
-      const { OrdemId, ProcessoId, ProdutoId, Status, MotivoParadaId, QuantidadeProduzida, QuantidadeInspecionada, QuantidadeRefugada, ObservacaoRefugo } = req.body
+      const { OrdemId, ProcessoId, ProdutoId, Status, MotivoParadaId, QuantidadeProduzida, QuantidadeInspecionada, QuantidadeRefugada, ObservacaoRefugo, InspecaoAprovada, ObservacaoInspecao } = req.body
       await Etapa.findOne({ where: { [Op.and]: [{ OrdemId }, { ProcessoId }] } })
         .then(async obj => {
           if (!obj) {
-            Etapa.create({ OrdemId, ProcessoId, QuantidadeProduzida, QuantidadeInspecionada, QuantidadeRefugada, ObservacaoRefugo })
+            Etapa.create({ OrdemId, ProcessoId, QuantidadeProduzida, QuantidadeInspecionada, QuantidadeRefugada, ObservacaoRefugo, InspecaoAprovada, ObservacaoInspecao })
           } else {
             if (QuantidadeProduzida)
               Etapa.update({ ...obj, QuantidadeProduzida }, { where: { [Op.and]: [{ OrdemId }, { ProcessoId }] } });
-            if (QuantidadeInspecionada)
+            if (QuantidadeInspecionada && InspecaoAprovada)
+              Etapa.update({ ...obj, QuantidadeInspecionada, InspecaoAprovada, ObservacaoInspecao }, { where: { [Op.and]: [{ OrdemId }, { ProcessoId }] } });
+            if (QuantidadeInspecionada && !InspecaoAprovada)
               Etapa.update({ ...obj, QuantidadeInspecionada }, { where: { [Op.and]: [{ OrdemId }, { ProcessoId }] } });
             if (QuantidadeRefugada)
               Etapa.update({ ...obj, QuantidadeRefugada, ObservacaoRefugo }, { where: { [Op.and]: [{ OrdemId }, { ProcessoId }] } });
@@ -33,7 +35,8 @@ module.exports = {
         .catch(e => {
           return res.status(500).json({ message: 'Ops, erro no servidor', detail: e.message })
         });
-      if (!QuantidadeProduzida && !QuantidadeRefugada) {
+      // Se nao for atualizacao de quantidade, é atualizada do status da etapa
+      if (!QuantidadeProduzida && !QuantidadeRefugada && !InspecaoAprovada) {
         const stages = await pluneERPService.patchStageSituation({ OrdemId, ProcessoId, ProdutoId, Status, MotivoParadaId })
         if (stages.ErrorStatus2)
           return res.status(400).json({ message: 'Erro ao atualizar', detail: stages.ErrorStatus });
