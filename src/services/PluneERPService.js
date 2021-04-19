@@ -1,18 +1,22 @@
 const fetch = require("node-fetch");
 const iconv = require('iconv-lite');
-const apiUrl = 'https://solucao-teste10.plune.com.br/'
 const user = 'REST/PCP.User/'
 const order = 'JSON/PCP.OrdemProducaoItem/'
 const linha = 'JSON/PCP.UsuarioPCPLinhaProducao/'
 const stage = 'JSON/PCP.OrdemProducaoItemProcessoProdutivo/'
 const possibleSitutuation = '/JSON/PCP.MotivoParada/'
 
-const cookie = "UltraClassLogin=teste10:Ultra.Users:rodrigo-maximo@hotmail.com:@QA-7E-MHqcgcQh8RR3HodCFDjIgtO66YS88PduANmtUtdJeOhah0YnekjJCcFqL6bwxYgTpWrMFggFqJdn1aAg:pt_br:::992"
+const apiUrl = 'https://solucao-teste10.plune.com.br/'
+// const cookie = "UltraClassLogin=teste10:Ultra.Users:rodrigo-maximo@hotmail.com:@rCc5M1fgy5Rh5QOWrrWfK9KA-3t5S8WPki0L7ni-TRCxNt6dglqpspQvifULv2_HLMAAku8l0aTdW5Hbp9oo_g:pt_br:::992"
 const FilialId = "896"
 
 class PluneERPService {
-
+    cookie
     constructor() { }
+
+    setParametros(headers) {
+        this.cookie = headers['token-pcp']
+    }
 
     async getUsers() {
         let _params = ''
@@ -23,7 +27,7 @@ class PluneERPService {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                cookie: cookie
+                cookie: this.cookie
             },
         })
         var decoded = iconv.decode(await res.buffer(), 'iso-8859-1');
@@ -45,7 +49,7 @@ class PluneERPService {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                cookie: cookie
+                cookie: this.cookie
             },
         })
         var decoded = iconv.decode(await res.buffer(), 'iso-8859-1');
@@ -68,7 +72,7 @@ class PluneERPService {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                cookie: cookie
+                cookie: this.cookie
             },
         })
         var decoded = iconv.decode(await res.buffer(), 'iso-8859-1');
@@ -84,7 +88,7 @@ class PluneERPService {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                cookie: cookie
+                cookie: this.cookie
             },
         })
         var decoded = iconv.decode(await res.buffer(), 'iso-8859-1');
@@ -106,7 +110,7 @@ class PluneERPService {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                cookie: cookie
+                cookie: this.cookie
             },
         })
         var decoded = iconv.decode(await res.buffer(), 'iso-8859-1');
@@ -118,7 +122,7 @@ class PluneERPService {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                cookie: cookie
+                cookie: this.cookie
             },
         })
         var decoded = iconv.decode(await res.buffer(), 'iso-8859-1');

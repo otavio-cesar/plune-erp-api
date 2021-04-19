@@ -34,14 +34,21 @@ module.exports = {
       }
     );
 
+
+    res.setHeader('Token', token)
+
+    let token_pcp = await Parametro.findOne({ where: { chave: 'token-pcp' } })
+    if (!token_pcp.valor)
+      throw new Error('Token pcp não definido no banco de dados')
+    token_pcp = token_pcp.valor
+
     let userResult = {
       id: usuario.id,
       nome: usuario.nome,
       email: usuario.email,
       permissao: usuario.permissao,
+      token_pcp
     };
-
-    res.setHeader('Token', token)
 
     let data
     try {
@@ -70,6 +77,7 @@ module.exports = {
 
   async getUsersPlune(req, res) {
     try {
+      pluneERPService.setParametros(req.headers)
       let data = await pluneERPService.getUsers();
       if (!data.ErrorStatus) {
         const usuarios = await usuarioService.ObterTodos();
