@@ -9,6 +9,7 @@ const pluneERPService = new PluneERPService()
 module.exports = {
 
   async getStagePluneByIdOrder(req, res) {
+    pluneERPService.setParametros(req.headers)
     const { id } = req.params
     const stages = await pluneERPService.getStage({ OrdemId: id })
     return res.json(stages);
@@ -16,6 +17,7 @@ module.exports = {
 
   async patchStageSituation(req, res) {
     try {
+      pluneERPService.setParametros(req.headers)
       const { OrdemId, ProcessoId, ProdutoId, Status, MotivoParadaId, QuantidadeProduzida, QuantidadeInspecionada, QuantidadeRefugada, ObservacaoRefugo, InspecaoAprovada, ObservacaoInspecao } = req.body
       await Etapa.findOne({ where: { [Op.and]: [{ OrdemId }, { ProcessoId }] } })
         .then(async obj => {
@@ -52,6 +54,7 @@ module.exports = {
 
   async getPossibleStageSituation(req, res) {
     try {
+      pluneERPService.setParametros(req.headers)
       const stages = await pluneERPService.getPossibleStageSituation()
       return res.json(stages);
     } catch (e) {

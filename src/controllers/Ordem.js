@@ -9,6 +9,7 @@ module.exports = {
 
   async getOrdemPlune(req, res) {
     try {
+      pluneERPService.setParametros(req.headers)
       let ordens = await pluneERPService.getOrders({})
       return res.json(ordens);
     } catch (e) {
@@ -18,6 +19,7 @@ module.exports = {
 
   async getOrdemPluneByLineProduction(req, res) {
     try {
+      pluneERPService.setParametros(req.headers)
       const { linhaprocessoprodutivoids } = req.headers
       let ordens
       const data = await pluneERPService.getStage({ LinhaProcessoProdutivoIds: linhaprocessoprodutivoids })
@@ -44,6 +46,7 @@ module.exports = {
 
   async getOrdemById(req, res) {
     try {
+      pluneERPService.setParametros(req.headers)
       const { id } = req.params
       let ordem
       ordem = await pluneERPService.getOrders({ Ids: [id] })
