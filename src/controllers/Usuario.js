@@ -34,7 +34,6 @@ module.exports = {
       }
     );
 
-
     res.setHeader('Token', token)
 
     let token_pcp = await Parametro.findOne({ where: { chave: 'token-pcp' } })
@@ -101,24 +100,16 @@ module.exports = {
   },
 
   async salvarUsuarioPCP(req, res) {
-    const { UserPCPId, email, nome, permissao, enviarEmail } = req.body;
+    const { UserPCPId, email, nome, permissao, senha } = req.body;
     var crypto = require("crypto");
     var hash = crypto.randomBytes(8).toString('hex');
     try {
       await Usuario.findOne({ where: { UserPCPId } })
         .then(async obj => {
           if (!obj) {
-            Usuario.create({ UserPCPId, email, nome, permissao, hash })
+            Usuario.create({ UserPCPId, email, nome, permissao, senha })
           } else {
-            Usuario.update({ ...obj, hash, email, permissao }, { where: { UserPCPId } });
-          }
-          if (enviarEmail) {
-            let html = `Digníssimo(a), acesse o link abaixo para criar a sua senha de acesso:<br><br>
-                        <a href="https://serene-ravine-73694.herokuapp.com/hash?=${hash}">Criar senha</a><br><br>
-                        Ignore esse email caso já tenha acesso e não queira mudar sua senha.<br><br>
-                        Att.,<br><br>
-                        Solução - Equipamentos para rede elétrica.`
-            await sendEmail('Convite para acessar o APP de produção', email, html)
+            Usuario.update({ ...obj, senha, email, permissao }, { where: { UserPCPId } });
           }
           return res.status(201).json({})
         })
